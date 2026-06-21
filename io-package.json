@@ -1,0 +1,64 @@
+{
+  "common": {
+    "name": "cfos",
+    "version": "0.1.0",
+    "news": {
+      "0.1.0": {
+        "en": "Initial release",
+        "de": "Erstveröffentlichung"
+      }
+    },
+    "title": "cFos Wallbox",
+    "titleLang": {
+      "en": "cFos Wallbox",
+      "de": "cFos Wallbox"
+    },
+    "desc": {
+      "en": "Adapter for cFos Power Brain Wallbox",
+      "de": "Adapter für cFos Power Brain Wallbox"
+    },
+    "authors": ["Your Name <your@email.com>"],
+    "keywords": ["cfos", "wallbox", "ev", "charging"],
+    "license": "MIT",
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "type": "energy",
+    "icon": "admin/cfos.png",
+    "enabled": true,
+    "readme": "",
+    "loglevel": "info",
+    "allowInit": true,
+    "supportStopInstance": true,
+    "supportCompactMode": true,
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll"
+  },
+  "native": {
+    "wallboxes": []
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Adapter-Info"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "name": "Verbindungsstatus",
+        "type": "boolean",
+        "role": "indicator.connected",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
+}

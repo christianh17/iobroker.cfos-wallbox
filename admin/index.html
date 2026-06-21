@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../css/adapter.css" />
+    <link rel="stylesheet" href="../../lib/css/materialize.css" />
+    <script src="../../lib/js/jquery-3.2.1.min.js"></script>
+    <script src="../../socket.io/socket.io.js"></script>
+    <script src="../../lib/js/translate.js"></script>
+    <script src="../../lib/js/materialize.js"></script>
+    <script src="../../js/adapter-settings.js"></script>
+</head>
+<body>
+<div class="m adapter-container">
+
+    <div class="row">
+        <div class="col s12">
+            <h5 data-i18n="cfos_wallboxes"></h5>
+            <p data-i18n="cfos_wallboxes_desc"></p>
+        </div>
+    </div>
+
+    <!-- Wallbox-Liste -->
+    <div class="row">
+        <div class="col s12">
+            <table class="striped" id="wallbox-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="cfos_name"></th>
+                        <th data-i18n="cfos_ip"></th>
+                        <th data-i18n="cfos_password"></th>
+                        <th data-i18n="cfos_dev_id"></th>
+                        <th data-i18n="cfos_interval"></th>
+                        <th data-i18n="cfos_enabled"></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="wallbox-list"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a class="btn waves-effect waves-light" id="add-wallbox">
+                <i class="material-icons left">add</i>
+                <span data-i18n="cfos_add_wallbox"></span>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Übersetzungen
+const translations = {
+    cfos_wallboxes:      { en: 'Wallboxes',         de: 'Wallboxen' },
+    cfos_wallboxes_desc: { en: 'Configure one or more cFos Power Brain Wallboxes.', de: 'Eine oder mehrere cFos Power Brain Wallboxen konfigurieren.' },
+    cfos_name:           { en: 'Name',              de: 'Name' },
+    cfos_ip:             { en: 'IP Address',        de: 'IP-Adresse' },
+    cfos_password:       { en: 'Password',          de: 'Kennwort' },
+    cfos_dev_id:         { en: 'Device ID',         de: 'Geräte-ID' },
+    cfos_interval:       { en: 'Poll interval (s)', de: 'Abfrageintervall (s)' },
+    cfos_enabled:        { en: 'Enabled',           de: 'Aktiv' },
+    cfos_add_wallbox:    { en: 'Add Wallbox',       de: 'Wallbox hinzufügen' },
+    cfos_delete:         { en: 'Delete',            de: 'Löschen' },
+};
+
+function t(key) {
+    const lang = systemDictionary && systemDictionary.__lang ? systemDictionary.__lang : 'de';
+    return (translations[key] && (translations[key][lang] || translations[key]['en'])) || key;
+}
+
+let wallboxes = [];
+
+function renderTable() {
+    const tbody = document.getElementById('wallbox-list');
+    tbody.innerHTML = '';
+    wallboxes.forEach((wb, idx) => {
+        tbody.innerHTML += `
+        <tr>
+            <td><input type="text"   class="wb-field" data-idx="${idx}" data-field="name"     value="${wb.name     || ''}"  placeholder="Wallbox 1" /></td>
+            <td><input type="text"   class="wb-field" data-idx="${idx}" data-field="ip"       value="${wb.ip       || ''}"  placeholder="192.168.17.3" /></td>
+            <td><input type="password" class="wb-field" data-idx="${idx}" data-field="password" value="${wb.password || ''}"  placeholder="(leer = kein Kennwort)" /></td>
+            <td><input type="text"   class="wb-field" data-idx="${idx}" data-field="devId"    value="${wb.devId    || 'E1'}" placeholder="E1" /></td>
+            <td><input type="number" class="wb-field" data-idx="${idx}" data-field="interval" value="${wb.interval || 30}"  placeholder="30" min="5" max="3600" /></td>
+            <td><input type="checkbox" class="wb-field" data-idx="${idx}" data-field="enabled" ${wb.enabled !== false ? 'checked' : ''} /></td>
+            <td><a class="btn-flat red-text delete-wb" data-idx="${idx}"><i class="material-icons">delete</i></a></td>
+        </tr>`;
+    });
+
+    // Felder-Events
+    document.querySelectorAll('.wb-field').forEach(el => {
+        el.addEventListener('change', () => {
+            const idx   = parseInt(el.dataset.idx);
+            const field = el.dataset.field;
+            wallboxes[idx][field] = el.type === 'checkbox' ? el.checked
+                                  : el.type === 'number'   ? parseInt(el.value)
+                                  : el.value;
+        });
+    });
+
+    // Löschen-Events
+    document.querySelectorAll('.delete-wb').forEach(el => {
+        el.addEventListener('click', () => {
+            wallboxes.splice(parseInt(el.dataset.idx), 1);
+            renderTable();
+        });
+    });
+}
+
+// ioBroker Adapter-Settings Hooks
+function load(settings) {
+    wallboxes = (settings && settings.wallboxes) ? JSON.parse(JSON.stringify(settings.wallboxes)) : [];
+    if (wallboxes.length === 0) {
+        // Standardeintrag für Ersteinrichtung
+        wallboxes.push({ name: 'Wallbox', ip: '192.168.17.3', password: '', devId: 'E1', interval: 30, enabled: true });
+    }
+    renderTable();
+}
+
+function save(callback) {
+    callback({ wallboxes });
+}
+
+document.getElementById('add-wallbox').addEventListener('click', () => {
+    wallboxes.push({ name: `Wallbox ${wallboxes.length + 1}`, ip: '', password: '', devId: 'E1', interval: 30, enabled: true });
+    renderTable();
+});
+</script>
+</body>
+</html>

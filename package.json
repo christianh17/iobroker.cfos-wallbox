@@ -1,0 +1,29 @@
+{
+  "name": "iobroker.cfos",
+  "version": "0.1.0",
+  "description": "ioBroker Adapter für cFos Power Brain Wallbox",
+  "author": {
+    "name": "Your Name",
+    "email": "your@email.com"
+  },
+  "homepage": "",
+  "license": "MIT",
+  "keywords": ["ioBroker", "cfos", "wallbox", "ev", "charging"],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "dependencies": {
+    "@iobroker/adapter-core": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.0"
+  },
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
