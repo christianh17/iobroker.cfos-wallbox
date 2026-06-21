@@ -1,5 +1,5 @@
 {
-  "name": "iobroker.cfos",
+  "name": "iobroker.cfos-wallbox",
   "version": "0.1.0",
   "description": "ioBroker Adapter für cFos Power Brain Wallbox",
   "author": {
@@ -11,7 +11,7 @@
   "keywords": ["ioBroker", "cfos", "wallbox", "ev", "charging"],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/christianh17/iobroker.cfos-wallbox.git"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.0"

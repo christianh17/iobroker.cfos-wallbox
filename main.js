@@ -6,7 +6,7 @@ const cfosApi  = require('./lib/cfos-api');
 class CfosAdapter extends utils.Adapter {
 
     constructor(options = {}) {
-        super({ ...options, name: 'cfos' });
+        super({ ...options, name: 'cfos-wallbox' });
         this.pollTimers = {};   // Ein Timer pro Wallbox
         this.on('ready',        this.onReady.bind(this));
         this.on('stateChange',  this.onStateChange.bind(this));
@@ -132,7 +132,7 @@ class CfosAdapter extends utils.Adapter {
 
         // Wallbox anhand der State-ID ermitteln
         const wallboxes = this.config.wallboxes || [];
-        const wb = wallboxes.find(w => id.startsWith(`cfos.0.${this.sanitizeId(w.name)}.`));
+        const wb = wallboxes.find(w => id.startsWith(`${this.namespace}.${this.sanitizeId(w.name)}.`));
         if (!wb) return;
 
         if (id.endsWith('.control.laderegeln_aktiv')) {

@@ -1,6 +1,6 @@
 {
   "common": {
-    "name": "cfos",
+    "name": "cfos-wallbox",
     "version": "0.1.0",
     "news": {
       "0.1.0": {
@@ -9,6 +9,7 @@
       }
     },
     "title": "cFos Wallbox",
+    "main": "main.js",
     "titleLang": {
       "en": "cFos Wallbox",
       "de": "cFos Wallbox"
@@ -23,7 +24,7 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "type": "energy",
-    "icon": "admin/cfos.png",
+    "icon": "admin/cfos-wallbox.png",
     "enabled": true,
     "readme": "",
     "loglevel": "info",
